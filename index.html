@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15:10 Crop + Hex Guide Web</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="toolbar">
+    <input type="file" id="fileInput" multiple accept="image/*">
+    <button id="prevBtn" data-i18n="prev">Előző</button>
+    <button id="nextBtn" data-i18n="next">Következő</button>
+    <button id="exportBtn" data-i18n="export">Exportálás</button>
+    <button id="ignoreBtn" data-i18n="ignore">Kihagyás</button>
+    <label><input type="checkbox" id="hexRotate"> <span data-i18n="hexRotate">Hex forgatás 30°</span></label>
+    <label><input type="checkbox" id="drawHex"> <span data-i18n="drawHex">Hex rajzolás exportnál</span></label>
+    <label for="sizeRange" data-i18n="cropSize">Crop méret:</label>
+    <input type="range" id="sizeRange" min="30" max="200" value="85">
+    <span id="infoText">Nincs kép betöltve</span>
+    <div class="lang-switcher">
+      <button id="langHu" class="lang-btn" data-lang="hu">🇭🇺 HU</button>
+      <button id="langEn" class="lang-btn" data-lang="en">🇬🇧 EN</button>
+    </div>
+    <button id="helpBtn" class="help-btn" title="Hogyan működik?">❓</button>
+  </div>
+  <div class="canvas-container">
+    <canvas id="mainCanvas"></canvas>
+  </div>
+  <div class="statusbar">
+    <span id="statusText">Használd a crop keretet, a csúszkát és a hex opciókat!</span>
+  </div>
+  <div class="exported-slideshow-container">
+    <div id="exportedSlideshow" class="exported-slideshow"></div>
+  </div>
+  <div id="helpModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" id="helpClose">&times;</span>
+      <div id="helpText">
+        <!-- Ide jön a help szöveg -->
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

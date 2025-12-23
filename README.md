@@ -1,0 +1,28 @@
+# 15:10 crop + hex guide
+
+Egyszerű GUI eszköz képek 15:10 (3:2) arányú kivágásához, középen halvány hex segédvonallal.
+
+## Telepítés
+
+```powershell
+python -m pip install -r .\requirements.txt
+```
+
+## Futtatás
+
+```powershell
+python .\picture_edit.py
+```
+
+## Használat
+
+- `Open images…`: válassz ki egy vagy több képet
+- Húzd a 15:10 keretet a pozicionáláshoz
+- `Crop size` csúszka: a keret mérete (arány fix, akár a képnél nagyobb is lehet)
+- `Hex rotate 30°`: kétállású hex forgatás (csúcs lent / lap lent)
+- `Export crop…`: kivág és PNG-ként ment (nincs átméretezés, a pixelméret megmarad)
+
+Ha a 15:10 keret kilóg a képből, exportnál a kilógó részek fehérek.
+Méretezésnél/mozgatásnál/forgatásnál a hex segédvonal nem mehet ki az eredeti kép határain kívül.
+
+Megjegyzés: a hex csak előnézeti segédvonal, a mentett kép téglalap (15:10).
