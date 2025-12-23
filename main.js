@@ -200,12 +200,13 @@ sizeRange.addEventListener('input', () => {
   updateInfo();
 });
 
+
+// Egér események
 canvas.addEventListener('mousedown', (e) => {
   if (!cropRect) return;
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
-  // Mindig engedjük a crop keret mozgatását, ha a crop kereten vagy a képen belül kattintunk
   if (pointInRect(x, y, cropRect) || pointInRect(x, y, {left:0,top:0,right:canvas.width,bottom:canvas.height})) {
     dragging = true;
     dragStart.x = x;
@@ -237,6 +238,45 @@ canvas.addEventListener('mouseup', () => {
 canvas.addEventListener('mouseleave', () => {
   dragging = false;
   canvas.style.cursor = 'default';
+});
+
+// Touch események mobilhoz
+canvas.addEventListener('touchstart', (e) => {
+  if (!cropRect) return;
+  if (e.touches.length !== 1) return;
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  const x = touch.clientX - rect.left;
+  const y = touch.clientY - rect.top;
+  if (pointInRect(x, y, cropRect) || pointInRect(x, y, {left:0,top:0,right:canvas.width,bottom:canvas.height})) {
+    dragging = true;
+    dragStart.x = x;
+    dragStart.y = y;
+    e.preventDefault();
+  }
+}, {passive: false});
+canvas.addEventListener('touchmove', (e) => {
+  if (!dragging || !cropRect) return;
+  if (e.touches.length !== 1) return;
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  const x = touch.clientX - rect.left;
+  const y = touch.clientY - rect.top;
+  const dx = x - dragStart.x;
+  const dy = y - dragStart.y;
+  dragStart.x = x;
+  dragStart.y = y;
+  cropRect.left += dx;
+  cropRect.right += dx;
+  cropRect.top += dy;
+  cropRect.bottom += dy;
+  clampCropToHex();
+  redraw();
+  updateInfo();
+  e.preventDefault();
+}, {passive: false});
+canvas.addEventListener('touchend', () => {
+  dragging = false;
 });
 
 function pointInRect(x, y, rect) {
