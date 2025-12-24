@@ -34,31 +34,7 @@ const helpModal = document.getElementById('helpModal');
 const helpClose = document.getElementById('helpClose');
 const helpText = document.getElementById('helpText');
 const slideshow = document.getElementById('exportedSlideshow');
-const moveXRange = document.getElementById('moveXRange');
-const moveYRange = document.getElementById('moveYRange');
-let lastMoveX = 0;
-let lastMoveY = 0;
-// Slider crop mozgatás
-moveXRange.addEventListener('input', () => {
-  if (!cropRect || !images.length) return;
-  const dx = parseInt(moveXRange.value) - lastMoveX;
-  lastMoveX += dx;
-  cropRect.left += dx;
-  cropRect.right += dx;
-  clampCropToHex();
-  redraw();
-  updateInfo();
-});
-moveYRange.addEventListener('input', () => {
-  if (!cropRect || !images.length) return;
-  const dy = parseInt(moveYRange.value) - lastMoveY;
-  lastMoveY += dy;
-  cropRect.top += dy;
-  cropRect.bottom += dy;
-  clampCropToHex();
-  redraw();
-  updateInfo();
-});
+
 
 
 let currentLang = 'hu';
@@ -421,8 +397,11 @@ function clampCenterForHex(cx, cy, r, w, h) {
 }
 
 function redraw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (!images.length) {
+    // Állítsuk be a canvas méretét fixen, hogy desktopon is látszódjon a szöveg
+    canvas.width = 600;
+    canvas.height = 400;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#ccc';
     ctx.font = '16px Segoe UI';
     ctx.fillText('Tölts fel képeket…', 20, 40);
@@ -432,6 +411,7 @@ function redraw() {
   // Méretezzük a canvas-t a képhez
   canvas.width = img.width;
   canvas.height = img.height;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(img, 0, 0);
   if (!cropRect) return;
   // Crop rect
