@@ -34,6 +34,32 @@ const helpModal = document.getElementById('helpModal');
 const helpClose = document.getElementById('helpClose');
 const helpText = document.getElementById('helpText');
 const slideshow = document.getElementById('exportedSlideshow');
+const moveXRange = document.getElementById('moveXRange');
+const moveYRange = document.getElementById('moveYRange');
+let lastMoveX = 0;
+let lastMoveY = 0;
+// Slider crop mozgatás
+moveXRange.addEventListener('input', () => {
+  if (!cropRect || !images.length) return;
+  const dx = parseInt(moveXRange.value) - lastMoveX;
+  lastMoveX += dx;
+  cropRect.left += dx;
+  cropRect.right += dx;
+  clampCropToHex();
+  redraw();
+  updateInfo();
+});
+moveYRange.addEventListener('input', () => {
+  if (!cropRect || !images.length) return;
+  const dy = parseInt(moveYRange.value) - lastMoveY;
+  lastMoveY += dy;
+  cropRect.top += dy;
+  cropRect.bottom += dy;
+  clampCropToHex();
+  redraw();
+  updateInfo();
+});
+
 
 let currentLang = 'hu';
 const i18n = {
@@ -240,18 +266,19 @@ canvas.addEventListener('mouseleave', () => {
   canvas.style.cursor = 'default';
 });
 
-// Touch események mobilhoz
+// Touch események mobilhoz (jobb támogatás)
 canvas.addEventListener('touchstart', (e) => {
   if (!cropRect) return;
   if (e.touches.length !== 1) return;
   const rect = canvas.getBoundingClientRect();
   const touch = e.touches[0];
-  const x = touch.clientX - rect.left;
-  const y = touch.clientY - rect.top;
+  const x = touch.pageX - rect.left - window.scrollX;
+  const y = touch.pageY - rect.top - window.scrollY;
   if (pointInRect(x, y, cropRect) || pointInRect(x, y, {left:0,top:0,right:canvas.width,bottom:canvas.height})) {
     dragging = true;
     dragStart.x = x;
     dragStart.y = y;
+    canvas.style.cursor = 'grabbing';
     e.preventDefault();
   }
 }, {passive: false});
@@ -260,8 +287,8 @@ canvas.addEventListener('touchmove', (e) => {
   if (e.touches.length !== 1) return;
   const rect = canvas.getBoundingClientRect();
   const touch = e.touches[0];
-  const x = touch.clientX - rect.left;
-  const y = touch.clientY - rect.top;
+  const x = touch.pageX - rect.left - window.scrollX;
+  const y = touch.pageY - rect.top - window.scrollY;
   const dx = x - dragStart.x;
   const dy = y - dragStart.y;
   dragStart.x = x;
@@ -277,6 +304,7 @@ canvas.addEventListener('touchmove', (e) => {
 }, {passive: false});
 canvas.addEventListener('touchend', () => {
   dragging = false;
+  canvas.style.cursor = 'default';
 });
 
 function pointInRect(x, y, rect) {
