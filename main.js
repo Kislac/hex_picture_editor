@@ -289,8 +289,9 @@ canvas.addEventListener('touchmove', (e) => {
   const touch = e.touches[0];
   const x = touch.pageX - rect.left - window.scrollX;
   const y = touch.pageY - rect.top - window.scrollY;
-  const dx = x - dragStart.x;
-  const dy = y - dragStart.y;
+  // Mozgatás gyorsítása mobilon (pl. 3x szorzó)
+  const dx = 3 * (x - dragStart.x);
+  const dy = 3 * (y - dragStart.y);
   dragStart.x = x;
   dragStart.y = y;
   cropRect.left += dx;
