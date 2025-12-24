@@ -1,3 +1,24 @@
+.footer {
+  width: 100vw;
+  background: #222;
+  color: #aaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0 12px 0;
+  font-size: 1rem;
+  border-top: 1px solid #333;
+  margin-top: 12px;
+}
+.footer a {
+  color: #4ea1f7;
+  text-decoration: none;
+  font-weight: bold;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
 body {
   margin: 0;
   font-family: 'Segoe UI', Arial, sans-serif;
